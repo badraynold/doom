@@ -48,17 +48,33 @@ class CNN(nn.Module):
         x = F.relu(self.fcl(x))
         x = self.fc2(x)
         return x
-    
-    
-        
-        
-
 
 # Making the body
 
-
+class SoftmaxBody(nn.Module):
+    def __init__(self, T):
+        super(SoftmaxBody,self).__init__()
+        self.T = T
+        
+    def forward(self,outputs):
+        probs = F.softmax(outputs * self.T)
+        actions = probs.multinomial()
 
 # Making the AI
+
+class AI:
+    def __init__(self, brain, body):
+        self.brain = brain 
+        self.body = body
+        
+    def __call__(self, inputs):
+        input = Variable(torch.from_numpy(np.array(inputs, dtype = np.float32)))
+        output = self.brain(input)
+        
+        actions = self.body(output)
+        return actions.data.numpy()
+        
+        
 
 # class AI:
 
